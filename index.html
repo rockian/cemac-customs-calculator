@@ -1,656 +1,149 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gabon Customs Calculator — Seek Smart (HS Lookup)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#f4fbfc;
-      --card:#ffffff;
-      --accent:#0f9d9a;
-      --accent-2:#0a6a81;
-      --muted:#64748b;
-      --shadow: 0 6px 20px rgba(12, 48, 64, 0.12);
-    }
-    *{box-sizing:border-box;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
-    body{margin:0;background:linear-gradient(180deg,#ecfeff 0%, var(--bg) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .container{width:100%;max-width:1100px;padding:18px;display:grid;grid-template-columns:1fr 440px;gap:18px}
-    .brand{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;box-shadow:0 6px 18px rgba(10,90,90,0.12)}
-    h1{margin:0;font-size:20px}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
-
-    .card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
-    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    input[type="number"], input[type="text"], select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #e6eef0;font-size:15px;background:linear-gradient(180deg,#fff,#fbfeff)}
-    .row{display:flex;gap:12px}
-    .col{flex:1}
-    .small{font-size:12px;color:var(--muted)}
-    .muted-note{font-size:12px;color:#7b8790;margin-top:6px}
-    .controls{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
-    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;box-shadow:0 8px 18px rgba(10,100,100,0.12)}
-    .btn-ghost{background:transparent;border:1px solid #e6eef0;color:var(--accent-2)}
-    .summary{display:flex;flex-direction:column;gap:12px}
-    .line{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg,#fbffff,#ffffff);border:1px solid #eef7f7}
-    .line.small{padding:8px;font-size:14px}
-    .total{font-weight:800;font-size:18px;color:var(--accent-2)}
-    .currency-tag{font-size:12px;color:var(--muted);background:#f1fcfb;padding:6px 8px;border-radius:8px;border:1px solid rgba(11,80,80,0.06)}
-    .hs-suggestions{position:relative}
-    .suggest-list{position:absolute;left:0;right:0;background:white;border:1px solid #e6eef0;border-radius:8px;max-height:220px;overflow:auto;z-index:50;padding:6px}
-    .suggest-item{padding:8px;border-radius:6px;cursor:pointer}
-    .suggest-item:hover{background:#f1fffe}
-    .tag{display:inline-block;padding:6px 8px;border-radius:8px;background:#f1fcfb;border:1px solid rgba(11,80,80,0.06);font-size:12px}
-    @media (max-width:980px){.container{grid-template-columns:1fr;max-width:720px}}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CEMAC Customs Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+ --accent:#0f9d9a;--accent2:#0a6a81;--bg:#f4fbfc;--card:#fff;--muted:#64748b;
+ --shadow:0 6px 20px rgba(12,48,64,0.12);
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
+body{margin:0;background:linear-gradient(180deg,#ecfeff 0%,var(--bg) 100%);min-height:100vh;
+ display:flex;align-items:center;justify-content:center;padding:24px}
+.container{width:100%;max-width:1000px;padding:18px;display:grid;grid-template-columns:1fr 420px;gap:18px}
+.card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+h1{margin:0;font-size:20px}
+p.lead{margin:0;color:var(--muted);font-size:13px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef0;font-size:14px}
+.btn{padding:9px 12px;border-radius:8px;border:0;font-weight:600;cursor:pointer}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+.btn-ghost{background:transparent;border:1px solid #e6eef0;color:var(--accent2)}
+.small{font-size:12px;color:var(--muted)}
+#langToggle{position:absolute;top:16px;right:22px;display:flex;gap:8px}
+#langToggle img{width:26px;height:18px;cursor:pointer;border:1px solid #dce7e8;border-radius:4px;transition:.2s}
+#langToggle img:hover{transform:scale(1.1);box-shadow:0 0 6px rgba(0,0,0,.1)}
+.line{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;border:1px solid #eef7f7;margin-top:4px}
+.total{font-weight:700;color:var(--accent2)}
+@media(max-width:980px){.container{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <!-- left -->
-    <div>
-      <div class="brand">
-        <div class="logo">SS</div>
-        <div>
-          <h1>Seek Smart — Gabon Customs Calculator</h1>
-          <p class="lead">Hybrid HS lookup: online (if available) → fallback to offline database. Pre-filled from your Ethanol invoice.</p>
-        </div>
-      </div>
+<div id="langToggle">
+ <img src="assets/flag-en.svg" alt="English" onclick="switchLang('en')" title="English">
+ <img src="assets/flag-fr.svg" alt="Français" onclick="switchLang('fr')" title="Français">
+</div>
 
-      <div class="card">
-        <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
-          <div><strong>HS Code Lookup (Hybrid)</strong><div class="small">Type product name or HS code</div></div>
-          <div class="tag" id="lookupStatus">Mode: <span id="modeLabel">auto</span></div>
-        </div>
-
-        <div style="margin-top:12px">
-          <label for="hsSearch">Search HS code / product</label>
-          <div class="hs-suggestions">
-            <input id="hsSearch" type="text" placeholder="e.g., methanol or 2905.11.00" />
-            <div id="suggestList" class="suggest-list" style="display:none"></div>
-          </div>
-          <div style="display:flex;gap:10px;margin-top:8px">
-            <input id="hsCode" type="text" placeholder="HS code (auto)" style="width:160px" />
-            <input id="hsDesc" type="text" placeholder="HS description (auto)" />
-          </div>
-          <div style="display:flex;gap:10px;margin-top:8px">
-            <input id="hsRate" type="number" step="0.01" placeholder="Duty rate (%)" style="width:160px" />
-            <button class="btn btn-ghost" id="applyHsBtn">Apply HS</button>
-          </div>
-          <div class="muted-note">If online lookup succeeds the result will be used; otherwise selection uses the embedded database. You can still manually override duty.</div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="card">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div style="flex:1">
-            <label for="product">Product name</label>
-            <input id="product" type="text" value="Methanol (Ethanol invoice)" />
-          </div>
-          <div style="width:140px">
-            <label for="category">Category</label>
-            <select id="category">
-              <option value="5">Essential / Raw material — 5%</option>
-              <option value="10">Industrial raw material — 10%</option>
-              <option value="20">Intermediate goods — 20%</option>
-              <option value="30">Finished goods / Luxury — 30%</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="height:12px"></div>
-
-        <div class="row">
-          <div class="col">
-            <label for="cif">CIF Value</label>
-            <input id="cif" type="number" step="0.01" value="18050.76" />
-            <div class="small muted-note">CIF (cost + insurance + freight). Pre-filled from your invoice.</div>
-          </div>
-          <div style="width:140px">
-            <label for="currency">Currency</label>
-            <select id="currency"><option value="USD">USD</option><option value="XAF">XAF</option></select>
-          </div>
-        </div>
-
-        <div style="height:8px"></div>
-
-        <div class="row">
-          <div class="col">
-            <label for="fx">Exchange rate (1 USD = XAF)</label>
-            <input id="fx" type="number" step="0.01" value="600" />
-          </div>
-          <div style="width:160px">
-            <label for="dutyOverride">Override duty rate (%)</label>
-            <input id="dutyOverride" type="number" step="0.01" placeholder="Leave blank to use HS/category" />
-          </div>
-        </div>
-
-        <div style="height:8px"></div>
-
-        <div style="display:flex;gap:12px;align-items:center">
-          <div style="flex:1">
-            <input id="industrialReduction" type="number" step="0.01" value="0" />
-            <div class="small muted-note">Industrial reduction (%) — enter 10 for 10% reduction on duty.</div>
-          </div>
-
-          <div style="width:250px">
-            <label>Other taxes</label>
-            <div style="display:flex;gap:8px">
-              <label><input id="tci" type="checkbox" checked/> TCI 1%</label>
-              <label><input id="tpc" type="checkbox" checked/> TPC 0.4%</label>
-              <label><input id="rs" type="checkbox" checked/> RS 0.5%</label>
-            </div>
-            <div style="height:6px"></div>
-            <label><input id="vatEx" type="checkbox"/> VAT Exempt</label>
-          </div>
-        </div>
-
-        <div style="height:12px"></div>
-
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn btn-primary" id="calcBtn">Calculate</button>
-          <button class="btn btn-ghost" id="resetBtn">Reset sample</button>
-          <button class="btn" id="copyBtn">Copy</button>
-          <button class="btn" id="csvBtn">Export CSV</button>
-        </div>
-
-        <div class="muted-note" style="margin-top:10px">Note: This estimator uses common CEMAC/Gabon rates. For legal clearance rely on your customs broker or DGDDI.</div>
-      </div>
-    </div>
-
-    <!-- right -->
-    <div>
-      <div class="card summary">
-        <div><h2>Calculation summary</h2><div class="small">Shown in XAF.</div></div>
-
-        <div class="line small"><div>CIF (XAF)</div><div id="cifXaf">—</div></div>
-        <div class="line"><div>HS Code</div><div id="outHs">—</div></div>
-        <div class="line"><div>Customs duty (<span id="dutyRateLabel">--%</span>)</div><div id="customsDuty">—</div></div>
-        <div class="line"><div>TCI (1%)</div><div id="tciAmt">—</div></div>
-        <div class="line"><div>TPC (0.4%)</div><div id="tpcAmt">—</div></div>
-        <div class="line"><div>Stat fee (0.5%)</div><div id="rsAmt">—</div></div>
-        <div class="line"><div>VAT (18%)</div><div id="vatAmt">—</div></div>
-        <div class="line" style="border-left:4px solid var(--accent);background:linear-gradient(180deg,#f9fffe,#ffffff);"><div class="total">Total duties & taxes</div><div id="totalDuties" class="total">—</div></div>
-        <div class="line"><div>Landed cost (CIF + taxes)</div><div id="landedCost" class="total">—</div></div>
-
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="small">Export or copy the breakdown.</div>
-          <div class="small">Built: Seek Smart</div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="card">
-        <div><strong>HS Lookup Notes</strong>
-          <div class="small">Online lookup attempts an external HS API (3s timeout). If offline or blocked, built-in offline database is used. Manual override still available.</div>
-        </div>
-        <div style="margin-top:8px"><div class="small">Mode: <span id="modeInfo">Waiting...</span></div></div>
-      </div>
-    </div>
+<div class="container">
+ <div>
+  <div class="card">
+    <h1 data-i18n="title"></h1>
+    <p class="lead" data-i18n="subtitle"></p>
   </div>
+  <div style="height:10px"></div>
+  <div class="card">
+    <label data-i18n="hs_lookup"></label>
+    <input id="hsSearch" placeholder="e.g. methanol / ex: méthanol">
+    <label data-i18n="product_name"></label>
+    <input id="product" value="Methanol (Ethanol invoice)">
+    <label data-i18n="cif_value"></label>
+    <input id="cif" type="number" value="18050.76">
+    <label data-i18n="currency"></label>
+    <select id="currency"><option value="USD">USD</option><option value="XAF">XAF</option></select>
+    <label data-i18n="exchange_rate"></label>
+    <input id="fx" type="number" value="600">
+    <label data-i18n="category"></label>
+    <select id="category">
+      <option value="5">5%</option>
+      <option value="10">10%</option>
+      <option value="20">20%</option>
+      <option value="30">30%</option>
+    </select>
+    <label data-i18n="industrial_reduction"></label>
+    <input id="industrialReduction" type="number" value="0">
+    <div class="small">
+      <label><input id="tci" type="checkbox" checked> <span data-i18n="tci"></span></label>
+      <label><input id="tpc" type="checkbox" checked> <span data-i18n="tpc"></span></label>
+      <label><input id="rs" type="checkbox" checked> <span data-i18n="rs"></span></label>
+      <label><input id="vatEx" type="checkbox"> <span data-i18n="vat_exempt"></span></label>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="calcBtn" data-i18n="calculate"></button>
+      <button class="btn btn-ghost" id="resetBtn" data-i18n="reset"></button>
+      <button class="btn" id="copyBtn" data-i18n="copy"></button>
+      <button class="btn" id="csvBtn" data-i18n="export_csv"></button>
+    </div>
+    <p class="small" data-i18n="note"></p>
+  </div>
+ </div>
 
-  <script>
-    // --- Defaults and constants
-    const DEFAULTS = { TCI_RATE: 0.01, TPC_RATE: 0.004, RS_RATE: 0.005, VAT_RATE: 0.18 };
+ <div class="card">
+   <div class="line"><span data-i18n="customs_duty"></span><span id="customsDuty">—</span></div>
+   <div class="line"><span data-i18n="tci"></span><span id="tciAmt">—</span></div>
+   <div class="line"><span data-i18n="tpc"></span><span id="tpcAmt">—</span></div>
+   <div class="line"><span data-i18n="rs"></span><span id="rsAmt">—</span></div>
+   <div class="line"><span data-i18n="vat"></span><span id="vatAmt">—</span></div>
+   <div class="line total"><span data-i18n="total_duties"></span><span id="totalDuties">—</span></div>
+   <div class="line total"><span data-i18n="landed_cost"></span><span id="landedCost">—</span></div>
+ </div>
+</div>
 
-    // --- Offline HS DB (common codes set A: ~80 common entries) ---
-    // Each entry: {code: "2905.11.00", desc: "Methanol (methyl alcohol)", duty:5}
-    // This is a compact common set for Gabon/CEMAC common imports.
-    const hsOfflineDB = [
-      {code:"2905.11.00", desc:"Methanol (methyl alcohol)", duty:5},
-      {code:"2207.10.00", desc:"Undenatured ethyl alcohol > 80% vol", duty:30},
-      {code:"2710.19.51", desc:"Diesel fuel", duty:5},
-      {code:"2710.19.59", desc:"Gasoline & other petroleum products", duty:5},
-      {code:"8703.23.10", desc:"Cars, petrol, <1500cc", duty:30},
-      {code:"8703.24.90", desc:"Cars, diesel, other", duty:30},
-      {code:"1006.30.10", desc:"Rice, semi-milled or wholly milled", duty:10},
-      {code:"0402.21.00", desc:"Milk powder, not concentrated", duty:10},
-      {code:"0406.10.00", desc:"Cheese and curd", duty:20},
-      {code:"0902.40.00", desc:"Tea (green/black)", duty:10},
-      {code:"0713.10.00", desc:"Dried peas, chickpeas", duty:10},
-      {code:"0803.00.00", desc:"Bananas, fresh", duty:10},
-      {code:"0901.11.00", desc:"Coffee (not roasted)", duty:10},
-      {code:"1005.90.00", desc:"Maize (corn)", duty:10},
-      {code:"8517.12.00", desc:"Mobile phones", duty:20},
-      {code:"8471.30.00", desc:"Laptops", duty:10},
-      {code:"8528.72.00", desc:"Monitors, LCD", duty:20},
-      {code:"9403.20.00", desc:"Furniture of metal", duty:30},
-      {code:"9403.60.90", desc:"Other furniture", duty:30},
-      {code:"6203.42.90", desc:"Men's cotton trousers", duty:30},
-      {code:"6204.62.90", desc:"Women's cotton dresses", duty:30},
-      {code:"4202.92.90", desc:"Luggage, handbags", duty:30},
-      {code:"9503.00.00", desc:"Toys; reduced", duty:30},
-      {code:"2203.00.00", desc:"Beer made from malt", duty:30},
-      {code:"2103.90.99", desc:"Sauces, mixed condiments", duty:20},
-      {code:"3004.90.90", desc:"Medicaments (other)", duty:5},
-      {code:"3003.90.99", desc:"Medicinal extracts", duty:5},
-      {code:"3808.92.00", desc:"Insecticides", duty:10},
-      {code:"3808.94.00", desc:"Disinfectants", duty:10},
-      {code:"2716.10.00", desc:"Electrical energy", duty:0},
-      {code:"8542.31.00", desc:"Electronic integrated circuits", duty:10},
-      {code:"8523.49.90", desc:"Discs, tapes, other media", duty:20},
-      {code:"8512.00.00", desc:"Electric ignition etc for engines", duty:10},
-      {code:"8708.40.90", desc:"Parts of motor vehicles", duty:20},
-      {code:"7308.90.99", desc:"Structures of iron or steel", duty:20},
-      {code:"8479.89.98", desc:"Machines, parts", duty:10},
-      {code:"8414.30.00", desc:"Air or vacuum pumps", duty:10},
-      {code:"8481.90.00", desc:"Taps, cocks and valves", duty:10},
-      {code:"3002.90.10", desc:"Human blood preparations", duty:5},
-      {code:"1701.11.00", desc:"Cane sugar, raw", duty:10},
-      {code:"1701.91.00", desc:"Refined sugar", duty:10},
-      {code:"1604.14.00", desc:"Prepared fish (tuna)", duty:10},
-      {code:"0302.12.00", desc:"Fresh or chilled salmon", duty:10},
-      {code:"1605.20.00", desc:"Crab meat, prepared or preserved", duty:10},
-      {code:"2523.29.00", desc:"Portland cement (other)", duty:10},
-      {code:"3815.12.00", desc:"Reaction initiators", duty:10},
-      {code:"9018.90.80", desc:"Instruments and appliances", duty:10},
-      {code:"8704.21.00", desc:"Trucks for goods, diesel", duty:30},
-      {code:"8704.22.00", desc:"Trucks for goods, petrol", duty:30},
-      {code:"2208.20.00", desc:"Undenatured ethyl alcohol, for beverages", duty:30},
-      {code:"2204.21.00", desc:"Wine of fresh grapes", duty:30},
-      {code:"3006.60.00", desc:"Pharmaceutical goods", duty:5},
-      {code:"2710.33.00", desc:"Fuel oils, other", duty:5},
-      {code:"2710.19.59", desc:"Other mineral oils", duty:5},
-      {code:"3809.10.00", desc:"Finishing agents etc.", duty:10},
-      {code:"3926.90.99", desc:"Other articles of plastics", duty:20},
-      {code:"4810.22.00", desc:"Paper, kraft liner", duty:20},
-      {code:"4819.10.00", desc:"Cartons and boxes", duty:20},
-      {code:"7606.12.00", desc:"Aluminium plates, sheets", duty:20},
-      {code:"6505.00.00", desc:"Hats and other headgear", duty:30},
-      {code:"9506.99.90", desc:"Articles for general use", duty:20},
-      {code:"8215.99.99", desc:"Other hand tools", duty:20}
-    ];
+<script>
+const DEFAULTS={TCI:0.01,TPC:0.004,RS:0.005,TVA:0.18};
+let currentLang='en',translations={};
 
-    // --- Elements ---
-    const hsSearch = document.getElementById('hsSearch');
-    const suggestList = document.getElementById('suggestList');
-    const hsCodeInput = document.getElementById('hsCode');
-    const hsDescInput = document.getElementById('hsDesc');
-    const hsRateInput = document.getElementById('hsRate');
-    const applyHsBtn = document.getElementById('applyHsBtn');
-    const modeLabel = document.getElementById('modeLabel');
-    const modeInfo = document.getElementById('modeInfo');
-    const lookupStatus = document.getElementById('lookupStatus');
+async function loadLang(lang){
+ const res=await fetch(`translations/${lang}.json`);
+ translations=await res.json();
+ document.querySelectorAll('[data-i18n]').forEach(el=>{
+   const key=el.getAttribute('data-i18n');
+   if(translations[key]) el.textContent=translations[key];
+ });
+ document.documentElement.lang=lang;
+ localStorage.setItem('lang',lang);
+ currentLang=lang;
+}
+function switchLang(lang){loadLang(lang);}
 
-    const cifInput = document.getElementById('cif');
-    const currencyInput = document.getElementById('currency');
-    const fxInput = document.getElementById('fx');
-    const dutyOverride = document.getElementById('dutyOverride');
-    const industrialReduction = document.getElementById('industrialReduction');
-    const tciCheckbox = document.getElementById('tci');
-    const tpcCheckbox = document.getElementById('tpc');
-    const rsCheckbox = document.getElementById('rs');
-    const vatEx = document.getElementById('vatEx');
-    const productInput = document.getElementById('product');
-    const categoryInput = document.getElementById('category');
+window.addEventListener('DOMContentLoaded',()=>{
+ const stored=localStorage.getItem('lang');
+ const lang=stored|| (navigator.language.startsWith('fr')?'fr':'en');
+ loadLang(lang);
+ calculate();
+});
 
-    const calcBtn = document.getElementById('calcBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const copyBtn = document.getElementById('copyBtn');
-    const csvBtn = document.getElementById('csvBtn');
+function fmt(n){return isFinite(n)?new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(Math.round(n)):'—';}
 
-    const cifXafEl = document.getElementById('cifXaf');
-    const outHs = document.getElementById('outHs');
-    const dutyRateLabel = document.getElementById('dutyRateLabel');
-    const customsDutyEl = document.getElementById('customsDuty');
-    const tciEl = document.getElementById('tciAmt');
-    const tpcEl = document.getElementById('tpcAmt');
-    const rsEl = document.getElementById('rsAmt');
-    const vatEl = document.getElementById('vatAmt');
-    const totalDutiesEl = document.getElementById('totalDuties');
-    const landedCostEl = document.getElementById('landedCost');
-    const modeInfoEl = document.getElementById('modeInfo');
+const cifInput=document.getElementById('cif'),
+currency=document.getElementById('currency'),
+fx=document.getElementById('fx'),
+category=document.getElementById('category'),
+indRed=document.getElementById('industrialReduction'),
+tci=document.getElementById('tci'),tpc=document.getElementById('tpc'),rs=document.getElementById('rs'),vatEx=document.getElementById('vatEx');
+const customsDutyEl=document.getElementById('customsDuty'),tciAmt=document.getElementById('tciAmt'),tpcAmt=document.getElementById('tpcAmt'),rsAmt=document.getElementById('rsAmt'),vatAmt=document.getElementById('vatAmt'),totalDuties=document.getElementById('totalDuties'),landedCost=document.getElementById('landedCost');
 
-    // Format helper
-    const fmt = (n) => isFinite(n) ? new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(Math.round(n)) : '—';
-
-    // calculator state
-    let calculatorState = {};
-
-    // --- HS selection / search logic (autocomplete from offline DB, with online attempt)
-    let onlineAvailable = false;
-    const onlineApiCandidates = [
-      // NOTE: these are placeholder public APIs — the app will attempt fetch; if blocked/fails it falls back.
-      // You can replace with any HS API endpoint supporting CORS in production.
-      "https://api.hscode.org/v1/search?q=",
-      "https://api.trade.gov/hscode?q="
-    ];
-
-    // Try an online endpoint with a short timeout to detect connectivity to HS API
-    async function tryOnlineLookup() {
-      // We'll attempt a quick fetch to a known endpoint for detection; we'll not depend on result format.
-      const url = onlineApiCandidates[0] + "test";
-      const controller = new AbortController();
-      const to = setTimeout(()=>controller.abort(), 2500);
-      try {
-        const res = await fetch(url, {signal: controller.signal});
-        clearTimeout(to);
-        if (res && res.ok) {
-          onlineAvailable = true;
-          modeLabel.textContent = 'online';
-          modeInfoEl.textContent = 'Online HS lookup: available (first candidate)';
-          lookupStatus.title = 'Online lookup available';
-          return true;
-        }
-      } catch(e){
-        // fail quietly
-      }
-      // fallback: offline
-      onlineAvailable = false;
-      modeLabel.textContent = 'offline';
-      modeInfoEl.textContent = 'Offline: using embedded HS database';
-      lookupStatus.title = 'Offline fallback';
-      return false;
-    }
-
-    // Build suggestions from offline DB (filter by code or description)
-    function suggestFromOffline(query) {
-      const q = query.trim().toLowerCase();
-      if (!q) return [];
-      const results = hsOfflineDB.filter(entry => {
-        return entry.code.toLowerCase().includes(q) || entry.desc.toLowerCase().includes(q);
-      }).slice(0, 30);
-      return results;
-    }
-
-    // Render suggestions
-    function renderSuggestions(list) {
-      if (!list || list.length === 0) {
-        suggestList.style.display = 'none';
-        suggestList.innerHTML = '';
-        return;
-      }
-      suggestList.style.display = 'block';
-      suggestList.innerHTML = '';
-      list.forEach(item=>{
-        const el = document.createElement('div');
-        el.className = 'suggest-item';
-        el.innerHTML = `<strong>${item.code}</strong> — ${item.desc} <span style="float:right;color:#536e6b">${item.duty}%</span>`;
-        el.addEventListener('click', ()=> {
-          selectHs(item);
-          suggestList.style.display = 'none';
-        });
-        suggestList.appendChild(el);
-      });
-    }
-
-    // Select HS entry (fills inputs)
-    function selectHs(item) {
-      hsCodeInput.value = item.code;
-      hsDescInput.value = item.desc;
-      hsRateInput.value = item.duty;
-      // auto-apply to duty override if desired: we will apply on "Apply HS" button or on calculation if not overridden
-      // also show in summary
-      outHs.textContent = `${item.code} — ${item.desc}`;
-      dutyRateLabel.textContent = item.duty + '%';
-      // set dutyOverride only if empty
-      if (!dutyOverride.value) {
-        hsRateInput.value = item.duty;
-      }
-    }
-
-    // Try online HS lookup for a query (returns array of entries or null)
-    async function onlineHsLookup(query) {
-      if (!query || !onlineAvailable) return null;
-      // Try each candidate with timeout
-      for (const base of onlineApiCandidates) {
-        const url = base + encodeURIComponent(query);
-        try {
-          const controller = new AbortController();
-          const to = setTimeout(()=>controller.abort(), 2500);
-          const res = await fetch(url, {signal: controller.signal});
-          clearTimeout(to);
-          if (!res.ok) continue;
-          const data = await res.json();
-          // Attempt to map response to expected shape; many APIs vary — we'll attempt several heuristics
-          // If API returns an array of results:
-          if (Array.isArray(data) && data.length>0) {
-            const mapped = data.slice(0,30).map(r=>{
-              // try to smartly pull code & description & duty
-              const code = r.code || r.hscode || r.hs || (r.hscode && r.hscode.code) || '';
-              const desc = r.description || r.name || r.title || r.desc || '';
-              const duty = r.duty || r.tax || r.rate || 0;
-              return {code: String(code), desc: String(desc).substring(0,200), duty: Number(duty) || 0};
-            }).filter(e=>e.code || e.desc);
-            if (mapped.length) return mapped;
-          }
-          // If API returns object with items:
-          if (data && data.items && Array.isArray(data.items)) {
-            const mapped = data.items.slice(0,30).map(r=>{
-              return {code: r.code || r.hscode || '', desc: r.description || r.name || '', duty: r.duty || 0};
-            });
-            if (mapped.length) return mapped;
-          }
-        } catch(err) {
-          // ignore and continue to next candidate
-        }
-      }
-      return null;
-    }
-
-    // Hook up search input
-    let searchTimer = null;
-    hsSearch.addEventListener('input', async (e) => {
-      const q = e.target.value.trim();
-      if (!q) { suggestList.style.display='none'; return; }
-      // first try offline suggestions
-      const offline = suggestFromOffline(q);
-      renderSuggestions(offline);
-      // also attempt online lookup in background (if available)
-      if (onlineAvailable) {
-        if (searchTimer) clearTimeout(searchTimer);
-        searchTimer = setTimeout(async ()=>{
-          modeInfoEl.textContent = 'Searching online...';
-          const onlineRes = await onlineHsLookup(q);
-          if (onlineRes && onlineRes.length) {
-            // prefer online results: render them
-            renderSuggestions(onlineRes);
-            modeInfoEl.textContent = 'Online results used';
-            modeLabel.textContent = 'online';
-          } else {
-            modeInfoEl.textContent = 'No online results — using offline DB';
-            modeLabel.textContent = 'offline';
-          }
-        }, 300);
-      }
-    });
-
-    // Apply HS button: copy hsRate into duty override (or into duty field)
-    applyHsBtn.addEventListener('click', () => {
-      const code = hsCodeInput.value.trim();
-      const desc = hsDescInput.value.trim();
-      const rate = parseFloat(hsRateInput.value);
-      if (!code) { alert('Please select or enter an HS code'); return; }
-      // fill display
-      outHs.textContent = `${code} — ${desc}`;
-      dutyRateLabel.textContent = (isFinite(rate) ? rate.toFixed(2) : '--') + '%';
-      // set dutyOverride so calculation uses it (unless user overrides later)
-      if (!isNaN(rate)) dutyOverride.value = rate;
-      // if product input empty, fill desc
-      if (!productInput.value) productInput.value = desc;
-      calculate();
-    });
-
-    // --- Online detection on load ---
-    (async ()=> {
-      await tryOnlineLookup();
-    })();
-
-    // --- Core calculation ---
-    function calculate() {
-      const cifRaw = parseFloat(cifInput.value) || 0;
-      const currency = currencyInput.value;
-      const fx = parseFloat(fxInput.value) || 1;
-      let cifXaf = (currency === 'USD') ? cifRaw * fx : cifRaw;
-
-      // Determine duty rate: priority -> dutyOverride -> applied HS rate -> category rate
-      let dutyRate = null;
-      const override = parseFloat(dutyOverride.value);
-      if (!isNaN(override) && dutyOverride.value !== '') {
-        dutyRate = override;
-      } else if (hsRateInput.value && hsRateInput.value !== '') {
-        const hsR = parseFloat(hsRateInput.value);
-        if (!isNaN(hsR)) dutyRate = hsR;
-      }
-      if (dutyRate === null) {
-        dutyRate = parseFloat(categoryInput.value) || 0;
-      }
-
-      // industrial reduction
-      const reductionPct = parseFloat(industrialReduction.value) || 0;
-      if (reductionPct > 0) dutyRate = dutyRate * (1 - (reductionPct / 100));
-      if (dutyRate < 0) dutyRate = 0;
-
-      // compute components
-      const customsDuty = cifXaf * (dutyRate / 100);
-      const tci = tciCheckbox.checked ? cifXaf * DEFAULTS.TCI_RATE : 0;
-      const tpc = tpcCheckbox.checked ? cifXaf * DEFAULTS.TPC_RATE : 0;
-      const rs = rsCheckbox.checked ? cifXaf * DEFAULTS.RS_RATE : 0;
-      const vatBase = cifXaf + customsDuty + tci + tpc + rs;
-      const vat = vatEx.checked ? 0 : (vatBase * DEFAULTS.VAT_RATE);
-      const totalDuties = customsDuty + tci + tpc + rs + vat;
-      const landedCost = cifXaf + totalDuties;
-
-      // update UI
-      cifXafEl.textContent = fmt(cifXaf);
-      dutyRateLabel.textContent = dutyRate.toFixed(2) + '%';
-      customsDutyEl.textContent = fmt(customsDuty);
-      tciEl.textContent = fmt(tci);
-      tpcEl.textContent = fmt(tpc);
-      rsEl.textContent = fmt(rs);
-      vatEl.textContent = fmt(vat);
-      totalDutiesEl.textContent = fmt(totalDuties);
-      landedCostEl.textContent = fmt(landedCost);
-
-      // state
-      calculatorState = {
-        product: productInput.value,
-        cif_input: cifRaw,
-        currency,
-        fx,
-        cif_xaf: cifXaf,
-        hs_code: hsCodeInput.value || '',
-        hs_desc: hsDescInput.value || '',
-        duty_rate: dutyRate,
-        customsDuty,
-        tci,
-        tpc,
-        rs,
-        vat,
-        totalDuties,
-        landedCost
-      };
-      // show HS in summary
-      outHs.textContent = calculatorState.hs_code ? `${calculatorState.hs_code} — ${calculatorState.hs_desc}` : '—';
-    }
-
-    // attach events
-    document.querySelectorAll('input,select').forEach(el => {
-      el.addEventListener('change', calculate);
-      el.addEventListener('input', calculate);
-    });
-
-    calcBtn.addEventListener('click', ()=>{
-      calculate();
-      calcBtn.textContent = 'Calculated ✓';
-      setTimeout(()=> calcBtn.textContent = 'Calculate', 1200);
-    });
-
-    resetBtn.addEventListener('click', ()=>{
-      productInput.value = 'Methanol (Ethanol invoice)';
-      cifInput.value = '18050.76';
-      currencyInput.value = 'USD';
-      fxInput.value = '600';
-      categoryInput.value = '5';
-      dutyOverride.value = '';
-      industrialReduction.value = '0';
-      tciCheckbox.checked = true;
-      tpcCheckbox.checked = true;
-      rsCheckbox.checked = true;
-      vatEx.checked = false;
-      hsSearch.value = '';
-      hsCodeInput.value = '2905.11.00';
-      hsDescInput.value = 'Methanol (methyl alcohol)';
-      hsRateInput.value = '5';
-      modeLabel.textContent = onlineAvailable ? 'online' : 'offline';
-      calculate();
-    });
-
-    copyBtn.addEventListener('click', async ()=>{
-      const s = [
-        `Product: ${calculatorState.product}`,
-        `HS: ${calculatorState.hs_code} — ${calculatorState.hs_desc}`,
-        `CIF (${calculatorState.currency}): ${calculatorState.cif_input}`,
-        `CIF (XAF): ${Math.round(calculatorState.cif_xaf)}`,
-        `Duty rate: ${calculatorState.duty_rate}%`,
-        `Customs duty: ${Math.round(calculatorState.customsDuty)} XAF`,
-        `TCI: ${Math.round(calculatorState.tci)} XAF`,
-        `TPC: ${Math.round(calculatorState.tpc)} XAF`,
-        `Stat fee: ${Math.round(calculatorState.rs)} XAF`,
-        `VAT: ${Math.round(calculatorState.vat)} XAF`,
-        `Total duties: ${Math.round(calculatorState.totalDuties)} XAF`,
-        `Landed cost: ${Math.round(calculatorState.landedCost)} XAF`
-      ].join('\\n');
-      try {
-        await navigator.clipboard.writeText(s);
-        copyBtn.textContent = 'Copied ✓';
-        setTimeout(()=> copyBtn.textContent = 'Copy', 1200);
-      } catch(e){
-        alert('Copy not supported. Manually copy the numbers.');
-      }
-    });
-
-    csvBtn.addEventListener('click', ()=>{
-      const data = [
-        ['Product','HS Code','HS Desc','CIF input','Currency','FX','CIF XAF','Duty Rate (%)','Customs Duty','TCI','TPC','RS','VAT','Total Duties','Landed Cost'],
-        [
-          calculatorState.product || '',
-          calculatorState.hs_code || '',
-          calculatorState.hs_desc || '',
-          calculatorState.cif_input || 0,
-          calculatorState.currency || '',
-          calculatorState.fx || 0,
-          Math.round(calculatorState.cif_xaf || 0),
-          calculatorState.duty_rate || 0,
-          Math.round(calculatorState.customsDuty || 0),
-          Math.round(calculatorState.tci || 0),
-          Math.round(calculatorState.tpc || 0),
-          Math.round(calculatorState.rs || 0),
-          Math.round(calculatorState.vat || 0),
-          Math.round(calculatorState.totalDuties || 0),
-          Math.round(calculatorState.landedCost || 0)
-        ]
-      ];
-      const csv = data.map(r => r.map(cell => {
-        if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"') || cell.includes('\\n'))) return '"' + cell.replace(/"/g,'""') + '"';
-        return cell;
-      }).join(',')).join('\\n');
-      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'gabon-customs-hs.csv'; document.body.appendChild(a); a.click(); a.remove();
-      URL.revokeObjectURL(url);
-    });
-
-    // initial state
-    hsCodeInput.value = '2905.11.00';
-    hsDescInput.value = 'Methanol (methyl alcohol)';
-    hsRateInput.value = '5';
-    (async ()=> {
-      await tryOnlineLookup();
-      calculate();
-    })();
-
-    // close suggestion when clicking outside
-    document.addEventListener('click', (e)=>{
-      if (!hsSearch.contains(e.target) && !suggestList.contains(e.target)) {
-        suggestList.style.display = 'none';
-      }
-    });
-
-  </script>
+function calculate(){
+ const cif=parseFloat(cifInput.value)||0; const fxv=parseFloat(fx.value)||1;
+ const cifXaf=currency.value==='USD'?cif*fxv:cif;
+ let duty=parseFloat(category.value)||0;
+ const red=parseFloat(indRed.value)||0; duty=duty*(1-red/100);
+ const d=cifXaf*duty/100; const tciA=tci.checked?cifXaf*DEFAULTS.TCI:0;
+ const tpcA=tpc.checked?cifXaf*DEFAULTS.TPC:0; const rsA=rs.checked?cifXaf*DEFAULTS.RS:0;
+ const vatBase=cifXaf+d+tciA+tpcA+rsA; const vat=vatEx.checked?0:vatBase*DEFAULTS.TVA;
+ const total=d+tciA+tpcA+rsA+vat; const landed=cifXaf+total;
+ customsDutyEl.textContent=fmt(d);tciAmt.textContent=fmt(tciA);
+ tpcAmt.textContent=fmt(tpcA);rsAmt.textContent=fmt(rsA);
+ vatAmt.textContent=fmt(vat);totalDuties.textContent=fmt(total);
+ landedCost.textContent=fmt(landed);
+}
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',calculate));
+document.getElementById('calcBtn').addEventListener('click',calculate);
+document.getElementById('resetBtn').addEventListener('click',()=>{cifInput.value=18050.76;fx.value=600;category.value=5;indRed.value=0;tci.checked=tpc.checked=rs.checked=true;vatEx.checked=false;calculate();});
+document.getElementById('copyBtn').addEventListener('click',()=>{navigator.clipboard.writeText(`Total: ${totalDuties.textContent} XAF`).then(()=>alert('Copied'))});
+document.getElementById('csvBtn').addEventListener('click',()=>{const csv=`Field,Amount\nCustoms Duty,${customsDutyEl.textContent}\nTCI,${tciAmt.textContent}\nTPC,${tpcAmt.textContent}\nRS,${rsAmt.textContent}\nVAT,${vatAmt.textContent}\nTotal,${totalDuties.textContent}\nLanded Cost,${landedCost.textContent}`;const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='customs.csv';a.click();});
+</script>
 </body>
 </html>
